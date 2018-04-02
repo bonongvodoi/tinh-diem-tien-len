@@ -1,17 +1,27 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "es2015",
-    "outDir": "build/dist",
-    "sourceMap": true,
-    "experimentalDecorators": true,
-    "jsx": "react-native",
-    "lib": ["dom", "es2015", "es2016"],
-    "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
-    "noEmitHelpers": true,
+    "target": "es6",
+    "jsx": "react",
+    "noImplicitAny": true,
+    "experimentalDecorators": true,
+    "preserveConstEnums": true,
+    "skipLibCheck": true,
+    "outDir": "built",
+    "rootDir": "src",
+    "sourceMap": true,
+    "allowJs": true,
     "importHelpers": true,
-    "strict": true,
-    "noImplicitReturns": true
-  }
+    "types": [
+    ]
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "built"
+  ],
+  "compileOnSave": false
 }
