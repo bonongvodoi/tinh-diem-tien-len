@@ -17,5 +17,14 @@ export const Size = {
 };
 
 export const AppImage = {
-  Logo: require('../../assets/images/logo.png')
-}
+  Logo: require('../../assets/images/logo.png'),
+  TutorialImages: [
+    require('../../assets/images/tut01.png'),
+    require('../../assets/images/tut02.png'),
+    require('../../assets/images/tut03.png'),
+    require('../../assets/images/tut04.png'),
+    require('../../assets/images/tut05.png'),
+    require('../../assets/images/tut06.png')
+  ]
+};
+

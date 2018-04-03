@@ -8,5 +8,6 @@ export const NativeHelper = {
 
 export const ScreenName = {
   HomeScreen: 'HomeScreen',
-  PointRecordScreen: 'PointRecordScreen'
-}
+  PointRecordScreen: 'PointRecordScreen',
+  TutorialScreen: 'TutorialScreen'
+};

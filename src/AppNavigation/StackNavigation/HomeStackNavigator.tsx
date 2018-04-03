@@ -2,6 +2,7 @@ import * as React from 'react'
 import { StackNavigator } from 'react-navigation';
 import {HomeScreen} from "../../Screens/Home/Home";
 import {PointRecordScreen} from "../../Screens/PointRecord/PointRecord";
+import {TutorialScreen} from "../../Screens/Tutorial/Tutorial";
 
 export const HomeStackNavigator = StackNavigator({
   HomeScreen: {
@@ -9,6 +10,9 @@ export const HomeStackNavigator = StackNavigator({
   },
   PointRecordScreen: {
     screen: PointRecordScreen,
+  },
+  TutorialScreen: {
+    screen: TutorialScreen
   }
 
 }, {

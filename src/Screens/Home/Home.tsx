@@ -64,6 +64,7 @@ export class HomeScreen extends React.Component<thisProps, thisState> {
               <Button bordered
                       style={styles.borderButton}
                       onPress={() => {
+                        this.props.navigation.navigate(ScreenName.TutorialScreen);
                       }}
               >
                 <Text style={{fontWeight: 'bold', color: Colors.Black}}>Hướng dẫn</Text>
