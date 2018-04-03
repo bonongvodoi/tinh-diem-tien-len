@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {StatusBar, StyleSheet, View, Text} from 'react-native';
 import {ScreenName} from "../../common/constains";
-import { Tabs, Header, Icon} from "native-base";
+import { Header, Icon} from "native-base";
 import {Colors} from "../../common/variables";
 import {Tab1} from "./Tabs/Tab1";
 import {Tab3} from "./Tabs/Tab3";
@@ -9,12 +9,13 @@ import {ResultTab} from "./Tabs/ResultTab";
 
 const Button: any = require('native-base').Button;
 const Tab: any = require('native-base').Tab;
+const Tabs: any = require('native-base').Tabs;
 interface thisProps {
   navigation: any
 }
 
 interface thisState {
-
+  currentTab: number
 }
 
 
@@ -23,6 +24,12 @@ export class PointRecordScreen extends React.Component<thisProps, thisState> {
     header: null,
   };
 
+  componentWillMount(){
+    this.setState({currentTab: 0})
+  }
+  onEndGame(){
+    this.setState({currentTab: 1})
+  }
   renderHeader() {
     return (
       <View style={{backgroundColor: Colors.RedStrong, flexDirection: 'row'}}>
@@ -41,7 +48,14 @@ export class PointRecordScreen extends React.Component<thisProps, thisState> {
           <Text style={{textAlign: 'center', fontSize: 16, fontWeight: 'bold', color: '#fff'}}>Ghi điểm</Text>
         </View>
         <View style={{flex: 1, height: 60, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={{textAlign: 'center', fontSize: 16, fontWeight: 'bold', color: '#fff'}}> Kết thúc</Text>
+          <Button
+            bordered
+            style={{borderColor: Colors.White, width: '100%',justifyContent: 'center', alignItems: 'center'}}
+            onPress={() =>{this.onEndGame()}}
+          >
+            <Text style={{textAlign: 'center', fontSize: 14, fontWeight: 'bold', color: '#fff'}}> Kết thúc</Text>
+          </Button>
+
         </View>
       </View>
     );
@@ -51,7 +65,7 @@ export class PointRecordScreen extends React.Component<thisProps, thisState> {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         {this.renderHeader()}
-          <Tabs initialPage={0}>
+          <Tabs initialPage={this.state.currentTab || 0}  page={this.state.currentTab}>
             <Tab heading="Ghi điểm"
                  tabStyle={styles.tabHeader}
                  textStyle={styles.tabHeaderText}
