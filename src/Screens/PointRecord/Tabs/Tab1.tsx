@@ -11,14 +11,22 @@ interface thisState {
     isStarted: boolean
 }
 
+interface InputPointDataModel {
+  players: string[]
+  data: any
+}
 export class Tab1 extends React.Component<thisProps, thisState> {
 
   componentWillMount(){
     this.setState({
-      isStated: false
+      isStarted: false,
+      data: null
     })
   }
 
+  onStartButtonClick(){
+    this.setState({isStarted: true});
+}
   renderInputName(){
     return (<View style={styles.inputRow}>
       <Input style={styles.input} placeholder='Tèo'/>
@@ -43,6 +51,7 @@ export class Tab1 extends React.Component<thisProps, thisState> {
       <Button bordered
               style={styles.borderButton}
               onPress={() => {
+                this.onStartButtonClick();
               }}
       >
         <Text style={{fontWeight: 'bold', color: Colors.Black}}>Bắt đầu</Text>

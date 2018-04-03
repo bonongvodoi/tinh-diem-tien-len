@@ -1,14 +1,14 @@
 import * as React from 'react';
 import {StatusBar, StyleSheet, View, Text} from 'react-native';
 import {ScreenName} from "../../common/constains";
-import {Tab, Tabs, Header, Icon} from "native-base";
+import { Tabs, Header, Icon} from "native-base";
 import {Colors} from "../../common/variables";
 import {Tab1} from "./Tabs/Tab1";
 import {Tab3} from "./Tabs/Tab3";
 import {Tab2} from "./Tabs/Tab2";
 
 const Button: any = require('native-base').Button;
-
+const Tab: any = require('native-base').Tab;
 interface thisProps {
   navigation: any
 }
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   tabHeader: {
     backgroundColor: Colors.White,
     borderBottomColor: Colors.RedStrong,
-    borderBottomWidth: 2
+    borderBottomWidth: 1
   },
   tabHeaderText: {
     color: Colors.Gray,
@@ -92,7 +92,8 @@ const styles = StyleSheet.create({
   activeTabHeader: {
     backgroundColor: Colors.White,
     borderBottomColor: Colors.RedStrong,
-    borderBottomWidth: 4,
+    borderBottomWidth: 3,
+    zIndex: 99
   },
   activeTabHeaderText: {
     color: Colors.Black,
