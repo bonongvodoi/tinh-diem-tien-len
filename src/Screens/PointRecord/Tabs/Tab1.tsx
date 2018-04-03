@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {StyleSheet, View, Text, Image} from 'react-native';
 import {Colors} from "../../../common/variables";
-import {Input, Label} from "native-base";
+import {Content, Input, Label} from "native-base";
 import {DataRow} from "../DataRow/DataRow";
 
 const Button: any = require('native-base').Button;
@@ -30,10 +30,10 @@ export class Tab1 extends React.Component<thisProps, thisState> {
       },
       data: {
         players: {
-          playerName1: 'Tèo',
-          playerName2: 'Tí',
-          playerName3: 'Cuội',
-          playerName4: 'Bờm'
+          playerName1: '',
+          playerName2: '',
+          playerName3: '',
+          playerName4: ''
         },
         list: []
       }
@@ -41,7 +41,22 @@ export class Tab1 extends React.Component<thisProps, thisState> {
   }
 
   onStartButtonClick() {
-    this.setState({isStarted: true});
+    let data = this.state.data;
+
+    if (data.players.playerName1 == '') {
+      data.players.playerName1 = 'P1'
+    }
+    if (data.players.playerName2 == '') {
+      data.players.playerName2 = 'P2'
+    }
+    if (data.players.playerName3 == '') {
+      data.players.playerName3 = 'P3'
+    }
+    if (data.players.playerName4 == '') {
+      data.players.playerName4 = 'P4'
+    }
+    this.setState({isStarted: true, data: data});
+
   }
 
   checkData(data: any) {
@@ -54,9 +69,7 @@ export class Tab1 extends React.Component<thisProps, thisState> {
   }
 
   onSaveNewRow(data: any) {
-    console.log("TRINH LOC");
-    console.log(this.checkData(data));
-    if (this.checkData(data)){
+    if (this.checkData(data)) {
       let list = this.state.data.list.slice();
       list.push(data);
 
@@ -64,6 +77,17 @@ export class Tab1 extends React.Component<thisProps, thisState> {
         data: {...this.state.data, list}
       }, () => {
         this.resetNewRow()
+      });
+    }
+  }
+
+  onSaveEditRow(data: any) {
+    if (this.checkData(data)) {
+      let list = this.state.data.list.slice();
+      // list[0] = data;
+
+      this.setState({
+        data: {...this.state.data, list}
       });
     }
   }
@@ -137,15 +161,15 @@ export class Tab1 extends React.Component<thisProps, thisState> {
 
   }
 
-  rowToAdd:any = null;
+  rowToAdd: any = null;
 
-  onFocusToFirstCell (){
+  onFocusToFirstCell() {
     this.rowToAdd.onFocusToFirstCell()
   }
+
   render() {
-    debugger;
     return (
-      <View style={styles.tabContent}>
+      <Content style={styles.tabContent}>
         <View style={styles.inputRowName}>
           {this.state.isStarted ? this.renderLabelName() : this.renderInputName()}
           {!this.state.isStarted ? this.renderButtonStart() : null}
@@ -153,24 +177,28 @@ export class Tab1 extends React.Component<thisProps, thisState> {
         {
           this.state.isStarted ?
             <View style={{paddingHorizontal: 5}}>
-            {
-              this.state.data.list && this.state.data.list.map((item: any, index: number) => {
-                return (
-                  <DataRow key={index} data={item} onSaveData={(data) => this.onSaveNewRow(data)}/>
-                );
-              })
-            }
-            {
-              this.state.isAddNewRow ? <DataRow ref={(e)=>{ this.rowToAdd = e}} data={this.state.newRow} onSaveData={(data) => this.onSaveNewRow(data)}
-              /> : null
-            }
-          </View>: null
+              {
+                this.state.data.list && this.state.data.list.length > 4 ?
+                  this.state.data.list.slice(this.state.data.list.length - 3, this.state.data.list.length).map((item: any, index: number) => {
+                  return (
+                    <DataRow key={index} data={item} onSaveData={(data) => this.onSaveEditRow(data)}/>
+                  );
+                }) : this.state.data.list.map((item: any, index: number) => {
+                  return (
+                    <DataRow key={index} data={item} onSaveData={(data) => this.onSaveEditRow(data)}/>
+                  );
+                })
+              }
+              {
+                this.state.isAddNewRow ? <DataRow ref={(e) => {
+                  this.rowToAdd = e
+                }} data={this.state.newRow} onSaveData={(data) => this.onSaveNewRow(data)}
+                /> : null
+              }
+            </View> : null
         }
 
-        <View style={styles.card}>
-          <Text style={styles.textInfo}>Dữ liệu chỉ hiển thị 4 ván cuối</Text>
-        </View>
-      </View>
+      </Content>
     );
   }
 }
