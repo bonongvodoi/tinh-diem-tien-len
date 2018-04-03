@@ -26,6 +26,12 @@ export const AppImage = {
     require('../../assets/images/tut04.png'),
     require('../../assets/images/tut05.png'),
     require('../../assets/images/tut06.png')
+  ],
+  Rank: [
+    require('../../assets/images/1.png'),
+    require('../../assets/images/2.png'),
+    require('../../assets/images/3.png'),
+    require('../../assets/images/4.png')
   ]
 };
 

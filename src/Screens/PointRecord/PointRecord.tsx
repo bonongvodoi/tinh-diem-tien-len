@@ -5,7 +5,7 @@ import { Tabs, Header, Icon} from "native-base";
 import {Colors} from "../../common/variables";
 import {Tab1} from "./Tabs/Tab1";
 import {Tab3} from "./Tabs/Tab3";
-import {Tab2} from "./Tabs/Tab2";
+import {ResultTab} from "./Tabs/ResultTab";
 
 const Button: any = require('native-base').Button;
 const Tab: any = require('native-base').Tab;
@@ -63,7 +63,7 @@ export class PointRecordScreen extends React.Component<thisProps, thisState> {
                  activeTabStyle={styles.activeTabHeader}
                  activeTextStyle={styles.activeTabHeaderText}
             >
-              <Tab2/>
+              <ResultTab/>
             </Tab>
             <Tab heading="Chi tiết"
                  tabStyle={styles.tabHeader}
