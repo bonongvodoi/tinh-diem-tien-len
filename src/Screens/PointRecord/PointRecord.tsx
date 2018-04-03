@@ -27,18 +27,21 @@ export class PointRecordScreen extends React.Component<thisProps, thisState> {
     return (
       <View style={{backgroundColor: Colors.RedStrong, flexDirection: 'row'}}>
         <View style={{
-          height: 60, width: 60, backgroundColor: Colors.RedStrong, justifyContent: 'center', alignItems: 'center',
+          height: 60,flex: 1, backgroundColor: Colors.RedStrong, justifyContent: 'center', alignItems: 'center',
           position: 'absolute', left: 0
         }}>
           <Button
             transparent
-            onPress={() => this.props.navigation.navigate("DrawerOpen")}
+            onPress={() => this.props.navigation.goBack()}
           >
-            <Icon name="ios-menu" style={{color: '#fff', fontSize: 30}}/>
+            <Icon name="ios-arrow-back" style={{color: '#fff', fontSize: 30}}/>
           </Button>
         </View>
+        <View style={{flex: 4, height: 60, justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={{textAlign: 'center', fontSize: 16, fontWeight: 'bold', color: '#fff'}}>Ghi điểm</Text>
+        </View>
         <View style={{flex: 1, height: 60, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={{textAlign: 'center', fontSize: 16, fontWeight: 'bold', color: '#fff'}}>Ghi điểm tiến lên</Text>
+          <Text style={{textAlign: 'center', fontSize: 16, fontWeight: 'bold', color: '#fff'}}> Kết thúc</Text>
         </View>
       </View>
     );
@@ -48,7 +51,7 @@ export class PointRecordScreen extends React.Component<thisProps, thisState> {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         {this.renderHeader()}
-          <Tabs initialPage={1}>
+          <Tabs initialPage={0}>
             <Tab heading="Ghi điểm"
                  tabStyle={styles.tabHeader}
                  textStyle={styles.tabHeaderText}

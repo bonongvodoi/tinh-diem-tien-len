@@ -2,101 +2,181 @@ import * as React from 'react';
 import {StyleSheet, View, Text, Image} from 'react-native';
 import {Colors} from "../../../common/variables";
 import {Input, Label} from "native-base";
+import {DataRow} from "../DataRow/DataRow";
+
 const Button: any = require('native-base').Button;
 
 interface thisProps {
 }
 
 interface thisState {
-    isStarted: boolean
-}
-
-interface InputPointDataModel {
-  players: string[]
+  isStarted: boolean,
+  isAddNewRow: boolean,
+  newRow: any,
   data: any
 }
+
 export class Tab1 extends React.Component<thisProps, thisState> {
 
-  componentWillMount(){
+  componentWillMount() {
     this.setState({
       isStarted: false,
-      data: null
+      isAddNewRow: true,
+      newRow: {
+        playerPoint1: '',
+        playerPoint2: '',
+        playerPoint3: '',
+        playerPoint4: ''
+      },
+      data: {
+        players: {
+          playerName1: 'Tèo',
+          playerName2: 'Tí',
+          playerName3: 'Cuội',
+          playerName4: 'Bờm'
+        },
+        list: []
+      }
     })
   }
 
-  onStartButtonClick(){
+  onStartButtonClick() {
     this.setState({isStarted: true});
-}
-  renderInputName(){
+  }
+
+  checkData(data: any) {
+    console.log(data);
+    if (data.playerPoint1 == null || data.playerPoint1 == '') return false;
+    if (data.playerPoint2 == null || data.playerPoint2 == '') return false;
+    if (data.playerPoint3 == null || data.playerPoint3 == '') return false;
+    if (data.playerPoint4 == null || data.playerPoint4 == '') return false;
+    return true;
+  }
+
+  onSaveNewRow(data: any) {
+    console.log("TRINH LOC");
+    console.log(this.checkData(data));
+    if (this.checkData(data)){
+      let list = this.state.data.list.slice();
+      list.push(data);
+
+      this.setState({
+        data: {...this.state.data, list}
+      }, () => {
+        this.resetNewRow()
+      });
+    }
+  }
+
+  resetNewRow() {
+    this.setState({
+      isAddNewRow: true,
+      newRow: {
+        playerPoint1: '',
+        playerPoint2: '',
+        playerPoint3: '',
+        playerPoint4: ''
+      }
+    });
+  }
+
+  renderInputName() {
     return (<View style={styles.inputRow}>
-      <Input style={styles.input} placeholder='Tèo'/>
-      <Input style={styles.input} placeholder='Tí'/>
-      <Input style={styles.input} placeholder='Cuội'/>
-      <Input style={styles.input} placeholder='Bờm'/>
+      <Input style={styles.input} value={this.state.data.players.playerName1}
+             onChangeText={(text: string) => {
+               let data = this.state.data;
+               data.players.playerName1 = text;
+               this.setState({data: data});
+             }}
+             placeholder='Tèo'/>
+      <Input style={styles.input} value={this.state.data.players.playerName2}
+             onChangeText={(text: string) => {
+               let data = this.state.data;
+               data.players.playerName2 = text;
+               this.setState({data: data});
+             }}
+             placeholder='Tí'/>
+      <Input style={styles.input} value={this.state.data.players.playerName3}
+             onChangeText={(text: string) => {
+               let data = this.state.data;
+               data.players.playerName3 = text;
+               this.setState({data: data});
+             }}
+             placeholder='Cuội'/>
+      <Input style={styles.input} value={this.state.data.players.playerName4}
+             onChangeText={(text: string) => {
+               let data = this.state.data;
+               data.players.playerName4 = text;
+               this.setState({data: data});
+             }}
+             placeholder='Bờm'/>
     </View>)
   }
 
-  renderLabelName(){
+  renderLabelName() {
     return (<View style={styles.inputRow}>
-      <Label style={styles.label}> Tèo</Label>
-      <Label style={styles.label}> Tí</Label>
-      <Label style={styles.label}> Cuội</Label>
-      <Label style={styles.label}> Bờm</Label>
+      <Label style={styles.label}> {this.state.data.players.playerName1}</Label>
+      <Label style={styles.label}> {this.state.data.players.playerName2}</Label>
+      <Label style={styles.label}> {this.state.data.players.playerName3}</Label>
+      <Label style={styles.label}> {this.state.data.players.playerName4}</Label>
     </View>)
   }
 
   renderButtonStart() {
-    return(
-    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems:'center'}}>
-      <Button bordered
-              style={styles.borderButton}
-              onPress={() => {
-                this.onStartButtonClick();
-              }}
-      >
-        <Text style={{fontWeight: 'bold', color: Colors.Black}}>Bắt đầu</Text>
-      </Button>
-    </View>)
+    return (
+      <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+        <Button bordered
+                style={styles.borderButton}
+                onPress={() => {
+                  this.onStartButtonClick();
+                }}
+        >
+          <Text style={{fontWeight: 'bold', color: Colors.Black}}>Bắt đầu</Text>
+        </Button>
+      </View>)
 
   }
-  render() {
-    return (
-        <View style={styles.tabContent}>
-          <View style={styles.inputRowName}>
-            { this.state.isStarted ? this.renderLabelName(): this.renderInputName()}
-            { !this.state.isStarted ? this.renderButtonStart(): null}
-          </View>
-          <View style={{ paddingHorizontal: 5}}>
-            <View style={styles.inputRow}>
-              <Input style={styles.input}/>
-              <Input style={styles.input}/>
-              <Input style={styles.input}/>
-              <Input style={styles.input}/>
-            </View>
-            <View style={styles.inputRow}>
-              <Input style={styles.input}/>
-              <Input style={styles.input}/>
-              <Input style={styles.input}/>
-              <Input style={styles.input}/>
-            </View>
-            <View style={styles.inputRow}>
-              <Input style={styles.input}/>
-              <Input style={styles.input}/>
-              <Input style={styles.input}/>
-              <Input style={styles.input}/>
-            </View>
-          </View>
 
-          <View style={styles.card}>
-            <Text style={styles.textInfo}> This is tab content</Text>
-          </View>
+  rowToAdd:any = null;
+
+  onFocusToFirstCell (){
+    this.rowToAdd.onFocusToFirstCell()
+  }
+  render() {
+    debugger;
+    return (
+      <View style={styles.tabContent}>
+        <View style={styles.inputRowName}>
+          {this.state.isStarted ? this.renderLabelName() : this.renderInputName()}
+          {!this.state.isStarted ? this.renderButtonStart() : null}
         </View>
+        {
+          this.state.isStarted ?
+            <View style={{paddingHorizontal: 5}}>
+            {
+              this.state.data.list && this.state.data.list.map((item: any, index: number) => {
+                return (
+                  <DataRow key={index} data={item} onSaveData={(data) => this.onSaveNewRow(data)}/>
+                );
+              })
+            }
+            {
+              this.state.isAddNewRow ? <DataRow ref={(e)=>{ this.rowToAdd = e}} data={this.state.newRow} onSaveData={(data) => this.onSaveNewRow(data)}
+              /> : null
+            }
+          </View>: null
+        }
+
+        <View style={styles.card}>
+          <Text style={styles.textInfo}>Dữ liệu chỉ hiển thị 4 ván cuối</Text>
+        </View>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  tabContent:{
+  tabContent: {
     flex: 1
   },
   card: {
@@ -106,7 +186,7 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     borderBottomWidth: 0,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 1,
@@ -141,7 +221,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     borderBottomWidth: 0,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 1,
