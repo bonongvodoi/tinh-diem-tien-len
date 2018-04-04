@@ -4,6 +4,8 @@ import {Colors} from "../../../common/variables";
 import {Content, Input} from "native-base";
 import {DataRow} from "../DataRow/DataRow";
 import {DataDisplayRow} from "../DataRow/DataDisplayRow";
+import {getCurrentMatch} from "../../../Services/index";
+import {MatchStatus} from "../../../common/constains";
 
 const Button: any = require('native-base').Button;
 const Label: any = require('native-base').Label;
@@ -17,7 +19,7 @@ interface thisState {
 }
 // fake data
 const fdata = {
-  status: 2,
+  status: MatchStatus.Finished,
   players: {
     playerName1: 'Nam',
     playerName2: 'Mạnh',
@@ -72,14 +74,17 @@ export class Tab3 extends React.Component<thisProps, thisState> {
   }
 
   async getDataFromLocalAsync(){
-    this.setState({data: fdata}, ()=>{ this.summaryData() })
+    let data = await getCurrentMatch();
+    console.log('TRINH TEST');
+    console.log(data);
+    this.setState({data: data}, ()=>{ this.summaryData() })
    }
 
    summaryData(){
      let list = this.state.data.list;
      let s1 = 0, s2 = 0, s3 = 0, s4 = 0;
 
-     list.forEach((item: any)=>{
+     list && list.length > 0 && list.forEach((item: any)=>{
        s1 = s1 + (+item.playerPoint1);
        s2 = s2 + (+item.playerPoint2);
        s3 = s3 + (+item.playerPoint3);
@@ -113,17 +118,18 @@ export class Tab3 extends React.Component<thisProps, thisState> {
   }
 
   render() {
+    if (this.state.data) return null;
     return (
       <Content style={styles.tabContent}>
         <View style={styles.inputRowName}>
-          { this.renderLabelName() }
-          { this.renderSummary() }
+          { this.state.data && this.renderLabelName() }
+          { this.state.data && this.renderSummary() }
         </View>
         {
 
             <View style={{paddingHorizontal: 5}}>
               {
-                this.state.data.list && this.state.data.list.map((item: any, index: number) => {
+                this.state.data && this.state.data.list && this.state.data.list.map((item: any, index: number) => {
                     return (
                       <DataDisplayRow key={index} data={item}/>
                     );

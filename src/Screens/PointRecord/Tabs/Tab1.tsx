@@ -4,6 +4,7 @@ import {Colors} from "../../../common/variables";
 import {Content, Input, Label} from "native-base";
 import {DataRow} from "../DataRow/DataRow";
 import {MatchStatus} from "../../../common/constains";
+import {setCurrentMatch} from "../../../Services/index";
 
 const Button: any = require('native-base').Button;
 
@@ -43,8 +44,7 @@ export class Tab1 extends React.Component<thisProps, thisState> {
   }
 
   saveCurrentMatchToLocalStore(data: any){
-    console.log('TRINH SAVE TO LOCAL HERE')
-    console.log(data);
+    setCurrentMatch(data);
   }
 
   onStartButtonClick() {
