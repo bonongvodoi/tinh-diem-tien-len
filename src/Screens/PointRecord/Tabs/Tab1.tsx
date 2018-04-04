@@ -187,7 +187,7 @@ export class Tab1 extends React.Component<thisProps, thisState> {
           this.state.data.status == MatchStatus.Playing ?
             <View style={{paddingHorizontal: 5}}>
               {
-                this.state.data.list && this.state.data.list.length > 4 ?
+                this.state.data.list && this.state.data.list.length >= 4 ?
                   this.state.data.list.slice(this.state.data.list.length - 3, this.state.data.list.length).map((item: any, index: number) => {
                   return (
                     <DataRow key={index} data={item} onSaveData={(data) => this.onSaveEditRow(data)}/>
