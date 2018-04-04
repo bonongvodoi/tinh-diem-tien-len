@@ -3,18 +3,19 @@ import {StyleSheet, View, Text, Image, ScrollView} from 'react-native';
 import {Colors} from "../../../common/variables";
 import {ResultItem} from "../../../Components/ResultItem/ResultItem";
 import {getCurrentMatch, removeCurrentMatch, setCurrentMatch} from "../../../Services/index";
+import {MatchStatus} from "../../../common/constains";
 const Button: any = require('native-base').Button;
 
 interface thisProps {
 }
 
 interface thisState {
-  status: number,
+  status: any,
   ranks: any
 }
 
 const fakeData = {
-  status: 2,
+  status: MatchStatus.Finished,
   ranks: [
     {
       rank: 0,
@@ -60,7 +61,7 @@ const fakeData = {
 };
 
 const fDatabase = {
-  status: 2,
+  status: MatchStatus.Finished,
   players: {
     playerName1: 'Nam',
     playerName2: 'Mạnh',
@@ -70,17 +71,17 @@ const fDatabase = {
   list: [
     {
       id: 1,
-      playerPoint1: '13',
-      playerPoint2: '12',
-      playerPoint3: '21',
-      playerPoint4: '1'
+      playerPoint1: '3',
+      playerPoint2: '3',
+      playerPoint3: '1',
+      playerPoint4: '0'
     },
     {
       id: 2,
-      playerPoint1: '1',
-      playerPoint2: '11',
-      playerPoint3: '1',
-      playerPoint4: '1'
+      playerPoint1: '2',
+      playerPoint2: '4',
+      playerPoint3: '0',
+      playerPoint4: '-2'
     },
     {
       id: 3,
@@ -115,32 +116,100 @@ export class ResultTab extends React.Component<thisProps, thisState> {
     let status = data.status;
     let ranks:any = [];
 
+    let list = data.list;
+    let p1 = list.map((item: any) => item.playerPoint1);
+    let p2 = list.map((item: any) => item.playerPoint2);
+    let p3 = list.map((item: any) => item.playerPoint3);
+    let p4 = list.map((item: any) => item.playerPoint4);
 
+    let p1sum = p1.reduce((a: any, b: any) => {
+      a[b] = a[b] || [];
+      a[b].push(b);
+      return a;
+    }, Object.create(null));
 
-    console.log('ManhNguyenBa');
-    console.log(fakeData);
+    let detail1:any = [];
+    for(let key in p1sum){
+      let o: any = {};
+      o[key] = p1sum[key].length;
+      detail1.push(o);
+    }
+
+    let p2sum = p2.reduce((a: any, b: any) => {
+      a[b] = a[b] || [];
+      a[b].push(b);
+      return a;
+    }, Object.create(null));
+
+    let detail2:any = [];
+    for(let key in p2sum){
+      let o: any = {};
+      o[key] = p2sum[key];
+      detail2.push(o);
+    }
+
+    let p3sum = p3.reduce((a: any, b: any) => {
+      a[b] = a[b] || [];
+      a[b].push(b);
+      return a;
+    }, Object.create(null));
+
+    let detail3:any = [];
+    for(let key in p3sum){
+      let o: any = {};
+      o[key] = p3sum[key];
+      detail3.push(o);
+    }
+
+    let p4sum = p4.reduce((a: any, b: any) => {
+      a[b] = a[b] || [];
+      a[b].push(b);
+      return a;
+    }, Object.create(null));
+
+    let detail4:any = [];
+    for(let key in p4sum){
+      let o: any = {};
+      o[key] = p4sum[key];
+      detail4.push(o);
+    }
+
+    let details: any = {
+      player1: detail1,
+      player2: detail2,
+      player3: detail3,
+      player4: detail4,
+    };
+
+    let sum1 = p1.reduce((a: any, b: any) => a + b, 0);
+    let sum2 = p2.reduce((a: any, b: any) => a + b, 0);
+    let sum3 = p3.reduce((a: any, b: any) => a + b, 0);
+    let sum4 = p4.reduce((a: any, b: any) => a + b, 0);
+
+    let rank = [
+      {player: 1, sum: sum1},
+      {player: 2, sum: sum2},
+      {player: 3, sum: sum3},
+      {player: 4, sum: sum4},
+    ];
+    rank.sort((a: any, b: any) => b.sum - a.sum);
+
+    let players = data.players;
+
+    for(let i = 0; i < 4; i++){
+      let number = rank[i].player;
+      ranks[i] = {
+        rank: i,
+        playerName: players['playerName' + number],
+        summaryPoint: rank[i].sum,
+        detail: details['player' + number]
+      }
+    }
+
     this.setState({
       status: status,
       ranks: ranks
     })
-  }
-
-  summaryData(){
-    let list:any = [];
-    let s1 = 0, s2 = 0, s3 = 0, s4 = 0;
-    list && list.forEach((item: any)=>{
-      s1 = s1 + (+item.playerPoint1);
-      s2 = s2 + (+item.playerPoint2);
-      s3 = s3 + (+item.playerPoint3);
-      s4 = s4 + (+item.playerPoint4);
-    });
-
-    // this.setState({summary: {
-    //   playerTotalPoint1: s1,
-    //   playerTotalPoint2: s2,
-    //   playerTotalPoint3: s3 ,
-    //   playerTotalPoint4: s4
-    // }});
   }
 
   renderResult(){
