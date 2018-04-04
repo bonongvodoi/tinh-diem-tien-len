@@ -41,19 +41,27 @@ export class DataRow extends React.Component<thisProps, thisState> {
     this.setState({data: nextProps.data});
   }
 
-  onUpdateFocus(){
-    if( this.state.data.playerPoint1 == '' ){
-      this.textInput1.focus()
+  onUpdateFocus(text: string){
+
+    if (isNaN(text as any)) return;
+
+    if( isNaN(this.state.data.playerPoint1 as any) || this.state.data.playerPoint1 == ''  ){
+      this.textInput1.focus();
+      return;
     } else
-    if( this.state.data.playerPoint2 == '' ){
+    if(isNaN(this.state.data.playerPoint2 as any) || this.state.data.playerPoint2 == '' ){
       this.textInput2.focus()
+      return;
     } else
-    if( this.state.data.playerPoint3 == '' ){
+    if(isNaN(this.state.data.playerPoint3 as any)  || this.state.data.playerPoint3 == ''){
       this.textInput3.focus()
+      return;
     }else
-    if ( this.state.data.playerPoint4 == '' ){
+    if ( isNaN(this.state.data.playerPoint4 as any) || this.state.data.playerPoint4 == '' ){
       this.textInput4.focus()
+      return;
     }
+    this.onSaveInputRow();
   }
 
   render() {
@@ -71,7 +79,7 @@ export class DataRow extends React.Component<thisProps, thisState> {
                  let data = this.state.data;
                  data.playerPoint1 = text;
                  this.setState({data: data});
-                 setTimeout(()=>{this.onUpdateFocus();},500);
+                 setTimeout(()=>{this.onUpdateFocus(text);},500);
                }}/>
         <TextInput style={styles.input}
                value={this.state.data.playerPoint2}
@@ -82,7 +90,7 @@ export class DataRow extends React.Component<thisProps, thisState> {
                  let data = this.state.data;
                  data.playerPoint2 = text;
                  this.setState({data: data});
-                 setTimeout(()=>{this.onUpdateFocus();},500);
+                 setTimeout(()=>{this.onUpdateFocus(text);},500);
                }}/>
         <TextInput style={styles.input}
                value={this.state.data.playerPoint3}
@@ -93,21 +101,18 @@ export class DataRow extends React.Component<thisProps, thisState> {
                  let data = this.state.data;
                  data.playerPoint3 = text;
                  this.setState({data: data});
-                 setTimeout(()=>{this.onUpdateFocus();},500);
+                 setTimeout(()=>{this.onUpdateFocus(text);},500);
                }}/>
         <TextInput style={styles.input}
                value={this.state.data.playerPoint4}
                blurOnSubmit={false}
                ref={(input) => { this.textInput4 = input; }}
                keyboardType={'numeric'}
-               onSubmitEditing={()=>{
-                 this.onSaveInputRow();
-               }}
                onChangeText={(text: string) => {
                  let data = this.state.data;
                  data.playerPoint4 = text;
-                 setTimeout(()=>{this.onUpdateFocus();},500);
-                 this.onSaveInputRow();
+                 setTimeout(()=>{this.onUpdateFocus(text); },500);
+                 if (!isNaN(text)) this.onSaveInputRow();
                }}/>
       </View>
     );

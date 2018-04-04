@@ -69,7 +69,6 @@ export class Tab1 extends React.Component<thisProps, thisState> {
   }
 
   checkData(data: any) {
-    console.log(data);
     if (data.playerPoint1 == null || data.playerPoint1 == '') return false;
     if (data.playerPoint2 == null || data.playerPoint2 == '') return false;
     if (data.playerPoint3 == null || data.playerPoint3 == '') return false;
