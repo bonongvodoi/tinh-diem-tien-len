@@ -3,6 +3,7 @@ import {StyleSheet, View, Text, Image, TouchableHighlight} from 'react-native';
 import {AppImage, Colors} from "../../common/variables";
 
 interface thisProps {
+  item: any
 }
 
 interface thisState {
@@ -13,34 +14,38 @@ export class ResultItem extends React.Component<thisProps, thisState> {
   state: thisState = {
     visible: false
   };
+
+  renderDetail() {
+    return(
+      <View style={styles.detail}>
+        { this.props.item.detail.map((it: any, index: number) => <View key={index} style={styles.detailItem}>
+          <Text> { `Số trận được ${Object.keys(it)[0]} điểm: `} </Text>
+          <Text> {`${it[Object.keys(it)[0]]} trận.`} </Text>
+        </View>) }
+      </View>
+    );
+
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <TouchableHighlight onPress={() => this.setState({visible: !this.state.visible})}>
           <View style={this.state.visible ? [styles.main, {backgroundColor: '#e5e5e5'}] : styles.main}>
             <View style={styles.imageContainer}>
-              <Image source={AppImage.Rank[0]} style={styles.image}/>
+              <Image source={AppImage.Rank[this.props.item.rank]} style={styles.image}/>
             </View>
             <View style={styles.contentContainer}>
-              <Text style={styles.title}> Cuội </Text>
-              <Text style={styles.text}> Tổng số điểm: 5 </Text>
+              <Text style={styles.title}> { this.props.item.playerName } </Text>
+              <Text style={styles.text}> {`Tổng số điểm: ${this.props.item.summaryPoint}`} </Text>
             </View>
           </View>
         </TouchableHighlight>
-        {this.state.visible ? <View style={styles.detail}>
-          <View style={styles.detailItem}>
-            <Text> Số trận được 3 điểm: </Text>
-            <Text> 2 trận. </Text>
-          </View>
-          <View style={styles.detailItem}>
-            <Text> Số trận được 3 điểm: </Text>
-            <Text> 2 trận. </Text>
-          </View>
-        </View> : null}
-      </View>
+        {this.state.visible ? this.renderDetail() : null}
+</View>
     );
   }
-}
+};
 
 const styles = StyleSheet.create({
   container: {

@@ -9,38 +9,125 @@ interface thisProps {
 }
 
 interface thisState {
-  data: any,
-  summary: any
+  status: number,
+  ranks: any
 }
 
+const fakeData = {
+  status: 2,
+  ranks: [
+    {
+      rank: 0,
+      playerName: 'Teo',
+      summaryPoint: 30,
+      detail: [
+        {'3': 5},
+        {'2': 4},
+        {'1': 3}
+      ]
+    },
+    {
+      rank: 1,
+      playerName: 'Ti',
+      summaryPoint: 24,
+      detail: [
+        {'3': 5},
+        {'2': 4},
+        {'1': 3}
+      ]
+    },
+    {
+      rank: 2,
+      playerName: 'To',
+      summaryPoint: 23,
+      detail: [
+        {'3': 5},
+        {'2': 4},
+        {'1': 3}
+      ]
+    },
+    {
+      rank: 3,
+      playerName: 'Tu',
+      summaryPoint: 20,
+      detail: [
+        {'3': 5},
+        {'2': 4},
+        {'1': 3}
+      ]
+    }
+  ]
+};
+
+const fDatabase = {
+  status: 2,
+  players: {
+    playerName1: 'Nam',
+    playerName2: 'Mạnh',
+    playerName3: 'Hoàng',
+    playerName4: 'Linh'
+  },
+  list: [
+    {
+      id: 1,
+      playerPoint1: '13',
+      playerPoint2: '12',
+      playerPoint3: '21',
+      playerPoint4: '1'
+    },
+    {
+      id: 2,
+      playerPoint1: '1',
+      playerPoint2: '11',
+      playerPoint3: '1',
+      playerPoint4: '1'
+    },
+    {
+      id: 3,
+      playerPoint1: '1',
+      playerPoint2: '12',
+      playerPoint3: '1',
+      playerPoint4: '1'
+    },
+    {
+      id: 4,
+      playerPoint1: '1',
+      playerPoint2: '1',
+      playerPoint3: '1',
+      playerPoint4: '2'
+    }
+  ]
+};
 export class ResultTab extends React.Component<thisProps, thisState> {
 
-  componentWillMount() {
+  async componentWillMount() {
     this.setState({
-      summary:{
-        playerTotalPoint1: 0,
-        playerTotalPoint2: 0,
-        playerTotalPoint3: 0,
-        playerTotalPoint4: 0
-      },
-      data: null
+      status: 2,
+      ranks: null
     });
-    this.getDataFromLocalAsync();
-  }
-
-  async getDataFromLocalAsync(){
     // removeCurrentMatch();
     // setCurrentMatch(fdata);
     let data = await getCurrentMatch();
-    this.setState({data: data}, ()=>{ this.summaryData() })
+    this.convertDataToState(fDatabase);
+  }
+
+  convertDataToState(data: any){
+    let status = data.status;
+    let ranks:any = [];
+
+
+
+    console.log('ManhNguyenBa');
+    console.log(fakeData);
+    this.setState({
+      status: status,
+      ranks: ranks
+    })
   }
 
   summaryData(){
-    let list = this.state.data.list;
-    console.log('manh abcxyz');
-    console.log(this.state.data);
+    let list:any = [];
     let s1 = 0, s2 = 0, s3 = 0, s4 = 0;
-
     list && list.forEach((item: any)=>{
       s1 = s1 + (+item.playerPoint1);
       s2 = s2 + (+item.playerPoint2);
@@ -48,30 +135,33 @@ export class ResultTab extends React.Component<thisProps, thisState> {
       s4 = s4 + (+item.playerPoint4);
     });
 
-    this.setState({summary: {
-      playerTotalPoint1: s1,
-      playerTotalPoint2: s2,
-      playerTotalPoint3: s3 ,
-      playerTotalPoint4: s4
-    }});
+    // this.setState({summary: {
+    //   playerTotalPoint1: s1,
+    //   playerTotalPoint2: s2,
+    //   playerTotalPoint3: s3 ,
+    //   playerTotalPoint4: s4
+    // }});
+  }
+
+  renderResult(){
+    return (
+      <ScrollView style={{alignSelf: 'stretch'}}>
+        { (this.state.ranks || []).map((item: object, index: number) => <ResultItem key={index} item={item}/>) }
+      </ScrollView>
+    );
   }
 
   render() {
-    if(this.state.data === null) return null;
+    if(this.state.status === null) return null;
     return (
         <View style={styles.tabContent}>
-          {this.state.data.status === 0 ? <View style={styles.card}>
+          {this.state.status === 0 ? <View style={styles.card}>
             <Text style={styles.textInfo}> Trận đấu chưa bắt đầu </Text>
           </View> : null}
-          {this.state.data.status === 1 ? <View style={styles.card}>
+          {this.state.status === 1 ? <View style={styles.card}>
             <Text style={styles.textInfo}> Trận đấu đang diễn ra </Text>
           </View> : null}
-          {this.state.data.status === 2 ? <ScrollView style={{alignSelf: 'stretch'}}>
-            <ResultItem/>
-            <ResultItem/>
-            <ResultItem/>
-            <ResultItem/>
-          </ScrollView> : null}
+          {this.state.status === 2 ? this.renderResult() : null}
         </View>
     );
   }
