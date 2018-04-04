@@ -3,8 +3,8 @@ const CURRENT_MATCH = 'currentMatch';
 const ALL_HISTORY_MATCHES = 'allHistoryMatches';
 
 //current match
-export const getCurrentMatch = () => {
-  let currentMatch = getItem(CURRENT_MATCH);
+export const getCurrentMatch = async () => {
+  let currentMatch = await getItem(CURRENT_MATCH);
   return currentMatch;
 };
 
@@ -15,6 +15,11 @@ export const setCurrentMatch = (value: object) => {
 
 export const mergeCurrentMatch = (value: object) => {
   let result = mergeItem(CURRENT_MATCH, value);
+  return result;
+};
+
+export const removeCurrentMatch = () => {
+  let result = removeItem(CURRENT_MATCH);
   return result;
 };
 
