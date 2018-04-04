@@ -1,11 +1,12 @@
 import * as React from 'react';
 import {StyleSheet, View, Text, Image} from 'react-native';
 import {Colors} from "../../../common/variables";
-import {Content, Input, Label} from "native-base";
+import {Content, Input} from "native-base";
 import {DataRow} from "../DataRow/DataRow";
 import {DataDisplayRow} from "../DataRow/DataDisplayRow";
 
 const Button: any = require('native-base').Button;
+const Label: any = require('native-base').Label;
 
 interface thisProps {
 }
