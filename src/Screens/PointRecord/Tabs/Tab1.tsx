@@ -69,17 +69,16 @@ export class Tab1 extends React.Component<thisProps, thisState> {
   }
 
   checkData(data: any) {
-    if (data.playerPoint1 == null || data.playerPoint1 == '') return false;
-    if (data.playerPoint2 == null || data.playerPoint2 == '') return false;
-    if (data.playerPoint3 == null || data.playerPoint3 == '') return false;
-    if (data.playerPoint4 == null || data.playerPoint4 == '') return false;
+    if (isNaN( data.playerPoint1 as any)) return false;
+    if (isNaN( data.playerPoint2 as any)) return false;
+    if (isNaN( data.playerPoint3 as any)) return false;
+    if (isNaN( data.playerPoint4 as any)) return false;
     return true;
   }
 
   onSaveNewRow(data: any) {
 
     if(this.state.data.list.indexOf(data) >= 0) return;
-
     data.id = this.state.data.list.length;
     if (this.checkData(data)) {
       let list = this.state.data.list.slice();
@@ -91,7 +90,8 @@ export class Tab1 extends React.Component<thisProps, thisState> {
         this.resetNewRow();
         this.saveCurrentMatchToLocalStore(this.state.data);
       });
-
+    }else{
+      this.rowToAdd.onUpdateFocus("0");
     }
   }
 
@@ -99,13 +99,11 @@ export class Tab1 extends React.Component<thisProps, thisState> {
     if (this.checkData(data)) {
       let list = this.state.data.list.slice();
       let index = list.indexOf(data);
-      if (index >= 0)
-      {
-        list[index] = data;
-      }
+      if (index >= 0) list[index] = data;
+
       this.setState({
         data: {...this.state.data, list}
-      }, this.saveCurrentMatchToLocalStore(this.state.data));
+      }, ()=>this.saveCurrentMatchToLocalStore(this.state.data));
     }
   }
 

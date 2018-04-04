@@ -111,8 +111,7 @@ export class DataRow extends React.Component<thisProps, thisState> {
                onChangeText={(text: string) => {
                  let data = this.state.data;
                  data.playerPoint4 = text;
-                 setTimeout(()=>{this.onUpdateFocus(text); },500);
-                 if (!isNaN(text)) this.onSaveInputRow();
+                 if (!isNaN(text as any))    setTimeout(()=>{this.onUpdateFocus(text); },500);
                }}/>
       </View>
     );
