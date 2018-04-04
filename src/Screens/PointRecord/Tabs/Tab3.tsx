@@ -26,24 +26,28 @@ const fdata = {
   },
   list: [
     {
+      id: 1,
       playerPoint1: '13',
       playerPoint2: '12',
       playerPoint3: '21',
       playerPoint4: '1'
     },
     {
+      id: 2,
       playerPoint1: '1',
       playerPoint2: '11',
       playerPoint3: '1',
       playerPoint4: '1'
     },
     {
+      id: 3,
       playerPoint1: '1',
       playerPoint2: '12',
       playerPoint3: '1',
       playerPoint4: '1'
     },
     {
+      id: 4,
       playerPoint1: '1',
       playerPoint2: '1',
       playerPoint3: '1',

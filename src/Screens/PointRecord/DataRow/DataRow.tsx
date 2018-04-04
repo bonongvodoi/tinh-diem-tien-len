@@ -100,12 +100,14 @@ export class DataRow extends React.Component<thisProps, thisState> {
                blurOnSubmit={false}
                ref={(input) => { this.textInput4 = input; }}
                keyboardType={'numeric'}
+               onSubmitEditing={()=>{
+                 this.onSaveInputRow();
+               }}
                onChangeText={(text: string) => {
                  let data = this.state.data;
                  data.playerPoint4 = text;
                  setTimeout(()=>{this.onUpdateFocus();},500);
                  this.onSaveInputRow();
-
                }}/>
       </View>
     );

@@ -23,6 +23,7 @@ export class Tab1 extends React.Component<thisProps, thisState> {
     this.setState({
       isAddNewRow: true,
       newRow: {
+        id: -1,
         playerPoint1: '',
         playerPoint2: '',
         playerPoint3: '',
@@ -42,7 +43,8 @@ export class Tab1 extends React.Component<thisProps, thisState> {
   }
 
   saveCurrentMatchToLocalStore(data: any){
-    // Save to local storage here
+    console.log('TRINH SAVE TO LOCAL HERE')
+    console.log(data);
   }
 
   onStartButtonClick() {
@@ -76,6 +78,10 @@ export class Tab1 extends React.Component<thisProps, thisState> {
   }
 
   onSaveNewRow(data: any) {
+
+    if(this.state.data.list.indexOf(data) >= 0) return;
+
+    data.id = this.state.data.list.length;
     if (this.checkData(data)) {
       let list = this.state.data.list.slice();
       list.push(data);
@@ -93,11 +99,14 @@ export class Tab1 extends React.Component<thisProps, thisState> {
   onSaveEditRow(data: any) {
     if (this.checkData(data)) {
       let list = this.state.data.list.slice();
-      // list[0] = data;
-
+      let index = list.indexOf(data);
+      if (index >= 0)
+      {
+        list[index] = data;
+      }
       this.setState({
         data: {...this.state.data, list}
-      });
+      }, this.saveCurrentMatchToLocalStore(this.state.data));
     }
   }
 
