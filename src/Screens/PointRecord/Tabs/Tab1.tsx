@@ -3,6 +3,7 @@ import {StyleSheet, View, Text, Image} from 'react-native';
 import {Colors} from "../../../common/variables";
 import {Content, Input, Label} from "native-base";
 import {DataRow} from "../DataRow/DataRow";
+import {MatchStatus} from "../../../common/constains";
 
 const Button: any = require('native-base').Button;
 
@@ -20,7 +21,6 @@ export class Tab1 extends React.Component<thisProps, thisState> {
 
   componentWillMount() {
     this.setState({
-      isStarted: false,
       isAddNewRow: true,
       newRow: {
         playerPoint1: '',
@@ -29,6 +29,7 @@ export class Tab1 extends React.Component<thisProps, thisState> {
         playerPoint4: ''
       },
       data: {
+        status: MatchStatus.Start,
         players: {
           playerName1: '',
           playerName2: '',
@@ -38,6 +39,10 @@ export class Tab1 extends React.Component<thisProps, thisState> {
         list: []
       }
     })
+  }
+
+  saveCurrentMatchToLocalStore(data: any){
+    // Save to local storage here
   }
 
   onStartButtonClick() {
@@ -55,7 +60,9 @@ export class Tab1 extends React.Component<thisProps, thisState> {
     if (data.players.playerName4 == '') {
       data.players.playerName4 = 'P4'
     }
-    this.setState({isStarted: true, data: data});
+    data.status = MatchStatus.Playing;
+
+    this.setState({ data: data});
 
   }
 
@@ -76,8 +83,10 @@ export class Tab1 extends React.Component<thisProps, thisState> {
       this.setState({
         data: {...this.state.data, list}
       }, () => {
-        this.resetNewRow()
+        this.resetNewRow();
+        this.saveCurrentMatchToLocalStore(this.state.data);
       });
+
     }
   }
 
@@ -171,11 +180,11 @@ export class Tab1 extends React.Component<thisProps, thisState> {
     return (
       <Content style={styles.tabContent}>
         <View style={styles.inputRowName}>
-          {this.state.isStarted ? this.renderLabelName() : this.renderInputName()}
-          {!this.state.isStarted ? this.renderButtonStart() : null}
+          {this.state.data.status == MatchStatus.Start ? this.renderInputName() : this.renderLabelName()}
+          {this.state.data.status == MatchStatus.Start ? this.renderButtonStart() : null}
         </View>
         {
-          this.state.isStarted ?
+          this.state.data.status == MatchStatus.Playing ?
             <View style={{paddingHorizontal: 5}}>
               {
                 this.state.data.list && this.state.data.list.length > 4 ?

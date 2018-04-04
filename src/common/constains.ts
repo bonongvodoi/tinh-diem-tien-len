@@ -11,3 +11,9 @@ export const ScreenName = {
   PointRecordScreen: 'PointRecordScreen',
   TutorialScreen: 'TutorialScreen'
 };
+
+export const MatchStatus = {
+  Start: 0,
+  Playing: 2,
+  Finished: 4
+}

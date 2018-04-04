@@ -45,7 +45,7 @@ export class PointRecordScreen extends React.Component<thisProps, thisState> {
           </Button>
         </View>
         <View style={{flex: 4, height: 60, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={{textAlign: 'center', fontSize: 16, fontWeight: 'bold', color: '#fff'}}>Ghi điểm</Text>
+          <Text style={{textAlign: 'center', fontSize: 16, fontWeight: 'bold', color: '#fff'}}>Ghi điểm tiến lên</Text>
         </View>
         <View style={{flex: 1, height: 60, justifyContent: 'center', alignItems: 'center'}}>
           <Button
