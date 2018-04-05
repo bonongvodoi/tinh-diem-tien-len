@@ -112,6 +112,12 @@ export class ResultTab extends React.Component<thisProps, thisState> {
     this.convertDataToState(fDatabase);
   }
 
+  async onTabUpdate() {
+    let data = await getCurrentMatch();
+    if(!data) return;
+    this.setState({data:data });
+  }
+
   convertDataToState(data: any){
     let status = data.status;
     let ranks:any = [];

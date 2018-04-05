@@ -8,8 +8,8 @@ export const getCurrentMatch = async () => {
   return currentMatch;
 };
 
-export const setCurrentMatch = (value: object) => {
-  let result = setItem(CURRENT_MATCH, value);
+export const setCurrentMatch = async (value: object) => {
+  let result = await setItem(CURRENT_MATCH, value);
   return result;
 };
 
@@ -46,14 +46,16 @@ export const removeAllHistoryMatches = () => {
 
 // asyncStorage
 export const getItem = async (key: string) => {
-  try {
     const value = await AsyncStorage.getItem(key);
-    if (value !== null) {
-      return value;
+    let model;
+    if (value) {
+      try {
+        model = JSON.parse(value);
+      } catch (e) {
+        // Error retrieving data
+      }
     }
-  } catch (error) {
-    // Error retrieving data
-  }
+    return model;
 };
 
 export const setItem = async (key: string, value: object) => {

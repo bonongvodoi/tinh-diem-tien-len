@@ -73,10 +73,14 @@ export class Tab3 extends React.Component<thisProps, thisState> {
      this.getDataFromLocalAsync();
   }
 
+  async onTabUpdate() {
+    let data = await getCurrentMatch();
+    if(!data) return;
+    this.setState({data:data });
+  }
+
   async getDataFromLocalAsync(){
     let data = await getCurrentMatch();
-    console.log('TRINH TEST');
-    console.log(data);
     this.setState({data: data}, ()=>{ this.summaryData() })
    }
 
@@ -118,7 +122,22 @@ export class Tab3 extends React.Component<thisProps, thisState> {
   }
 
   render() {
-    if (this.state.data) return null;
+    if(!this.state.data) return null;
+
+    if (this.state.data.status == MatchStatus.Start)
+      return (
+        <View style={styles.card}>
+          <Text>Trân đấu chưa diễn ra</Text>
+        </View>
+      );
+
+    if (this.state.data.status == MatchStatus.Playing)
+      return (
+        <View style={styles.card}>
+          <Text>Trân đấu đang diễn ra</Text>
+        </View>
+      )
+
     return (
       <Content style={styles.tabContent}>
         <View style={styles.inputRowName}>
@@ -137,7 +156,6 @@ export class Tab3 extends React.Component<thisProps, thisState> {
               }
             </View>
         }
-
       </Content>
     );
   }

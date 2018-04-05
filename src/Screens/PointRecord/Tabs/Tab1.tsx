@@ -4,7 +4,7 @@ import {Colors} from "../../../common/variables";
 import {Content, Input, Label} from "native-base";
 import {DataRow} from "../DataRow/DataRow";
 import {MatchStatus} from "../../../common/constains";
-import {setCurrentMatch} from "../../../Services/index";
+import {getCurrentMatch, removeCurrentMatch, setCurrentMatch} from "../../../Services/index";
 
 const Button: any = require('native-base').Button;
 
@@ -40,12 +40,33 @@ export class Tab1 extends React.Component<thisProps, thisState> {
         },
         list: []
       }
-    })
+    });
+    this.checkLocalStorage();
   }
 
-  saveCurrentMatchToLocalStore(data: any){
-    setCurrentMatch(data);
+  async checkLocalStorage(){
+   let data = await getCurrentMatch();
+   if(!data) return;
+
+   if ( data.status === MatchStatus.Finished )
+   {
+     await removeCurrentMatch();
+   }else {
+     this.setState({data: data});
+   }
   }
+
+  async onTabUpdate() {
+    let data = await getCurrentMatch();
+    if(!data) return;
+    this.setState({data:data });
+  }
+
+  async saveCurrentMatchToLocalStore(data: any){
+    await setCurrentMatch(data);
+  }
+
+
 
   onStartButtonClick() {
     let data = this.state.data;
