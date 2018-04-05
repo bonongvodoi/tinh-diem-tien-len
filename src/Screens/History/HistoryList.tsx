@@ -1,11 +1,13 @@
 import * as React from 'react';
-import {StatusBar, StyleSheet, View, Image, TouchableOpacity} from 'react-native';
+import {StatusBar, StyleSheet, View, Image, TouchableOpacity, Alert} from 'react-native';
 import {MatchStatus, ScreenName} from "../../common/constains";
 import {Header, Icon, Left, Right, Title, Body, Container, Content, List, ListItem, Thumbnail} from "native-base";
 import {AppImage, Colors} from "../../common/variables";
+import {getAllHistoryMatches, setAllHistoryMatches} from "../../Services/index";
 
 const Button: any = require('native-base').Button;
 const Text: any = require('native-base').Text;
+const TextRN: any = require('react-native').Text;
 
 const FakeDataItem = {
   status: MatchStatus.Finished,
@@ -68,16 +70,36 @@ export class HistoryList extends React.Component<thisProps, thisState> {
     this.getListData();
   }
 
-  getListData() {
+  async getListData() {
 
-    let dataList = [];
-    for (let i = 0; i < 10; i++) {
-      dataList.push(FakeDataItem);
-    }
+    // let dataList = [];
+    // for (let i = 0; i < 10; i++) {
+    //   dataList.push(FakeDataItem);
+    // }
+    //
+    // console.log(dataList);
+    let data = await getAllHistoryMatches()
+    this.setState({list: data});
 
-    console.log(dataList);
+  }
 
-    this.setState({list: dataList});
+ async onDeleteHistory(){
+   Alert.alert(
+     'Xác nhận',
+     'Bạn có chắc chắn muốn tất cả xóa lịch sử trận đấu?',
+     [
+       {
+         text: 'Không', onPress: () => {
+       }
+       },
+       {
+         text: 'Có', onPress: () => {
+          setAllHistoryMatches(null);
+       }
+       },
+     ],
+     {cancelable: false}
+   )
 
   }
 
@@ -85,8 +107,7 @@ export class HistoryList extends React.Component<thisProps, thisState> {
     return (
       <View style={{backgroundColor: Colors.RedStrong, flexDirection: 'row'}}>
         <View style={{
-          height: 60, width: 60, backgroundColor: Colors.RedStrong, justifyContent: 'center', alignItems: 'center',
-          position: 'absolute', left: 0
+          height: 60, flex: 1, backgroundColor: Colors.RedStrong, justifyContent: 'center', alignItems: 'center'
         }}>
           <Button
             transparent
@@ -95,8 +116,24 @@ export class HistoryList extends React.Component<thisProps, thisState> {
             <Icon name="ios-menu" style={{color: '#fff', fontSize: 30}}/>
           </Button>
         </View>
+        <View style={{flex: 4, height: 60, justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={{
+            textAlign: 'center',
+            fontSize: 16,
+            fontWeight: 'bold',
+            color: '#fff'
+          }}>Lịch sử đấu</Text>
+        </View>
         <View style={{flex: 1, height: 60, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={{textAlign: 'center', fontSize: 16, fontWeight: 'bold', color: '#fff'}}>Lịch sử đấu</Text>
+          <Button
+            bordered
+            style={{borderColor: Colors.White, width: '100%', justifyContent: 'center', alignItems: 'center'}}
+            onPress={() => {
+              this.onDeleteHistory()
+            }}
+          >
+            <TextRN style={{textAlign: 'center', fontSize: 14, fontWeight: 'bold', color: '#fff'}} uppercase={false}> Xóa</TextRN>
+          </Button>
         </View>
       </View>
     );
@@ -115,6 +152,16 @@ export class HistoryList extends React.Component<thisProps, thisState> {
 
                   let name = item.players.playerName1 + ' , ' + item.players.playerName2 + ' , ' + item.players.playerName3 + ' , ' + item.players.playerName4;
 
+                  let list = item.list;
+                  let s1 = 0, s2 = 0, s3 = 0, s4 = 0;
+
+                  list && list.length > 0 && list.forEach((item: any)=>{
+                    s1 = s1 + (+item.playerPoint1);
+                    s2 = s2 + (+item.playerPoint2);
+                    s3 = s3 + (+item.playerPoint3);
+                    s4 = s4 + (+item.playerPoint4);
+                  });
+
                   return (
                     <ListItem avatar key={index}>
                       <Left>
@@ -129,12 +176,12 @@ export class HistoryList extends React.Component<thisProps, thisState> {
                         onPress={() => this.props.navigation.navigate(ScreenName.HistoryDetails, {data: item})}>
                         <Text>{name}</Text>
                       </TouchableOpacity>
-                      <Text note> Trinh: 1, Lan: 2</Text>
-                      <Text note> Manh: 1, Nguyên: 2</Text>
+                      <Text note> {`${item.players.playerName1}: ${s1}, ${item.players.playerName2}: ${s2}` }</Text>
+                      <Text note> {`${item.players.playerName3}: ${s3}, ${item.players.playerName4}: ${s4}` }</Text>
                       </Body>
                       <Right>
                         <Text
-                          note>{item.dateTime.getDay() + '/' + item.dateTime.getMonth() + '/' + item.dateTime.getFullYear()}</Text>
+                          note>{item.dateTime}</Text>
                       </Right>
                     </ListItem>)
                 })

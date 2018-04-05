@@ -8,7 +8,7 @@ const defaultAvatar = 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b
 
 const menuData = [
   {
-    title: 'Hướng dẫn',
+    title: 'Ghi điểm',
     linkTo: ScreenName.HomeScreen,
   },
   {

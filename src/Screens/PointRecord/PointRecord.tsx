@@ -6,7 +6,7 @@ import {Colors} from "../../common/variables";
 import {Tab1} from "./Tabs/Tab1";
 import {Tab3} from "./Tabs/Tab3";
 import {ResultTab} from "./Tabs/ResultTab";
-import {getCurrentMatch, setCurrentMatch} from "../../Services/index";
+import {getAllHistoryMatches, getCurrentMatch, setAllHistoryMatches, setCurrentMatch} from "../../Services/index";
 
 const Button: any = require('native-base').Button;
 const Tab: any = require('native-base').Tab;
@@ -64,6 +64,18 @@ export class PointRecordScreen extends React.Component<thisProps, thisState> {
     this.setState({headerText: text})
   }
 
+  async saveHistory(data: any){
+    let list = await getAllHistoryMatches();
+    list = list && list.slice(-9);
+    let currentDate = new Date();
+    let dateTimeString = currentDate.getDay() + '/' + currentDate.getMonth() + '/' + currentDate.getFullYear()
+    let item = {...data, dateTime: dateTimeString}
+    if (list == null) list = [];
+    list.push(item);
+
+    await setAllHistoryMatches(list);
+  }
+
   async onEndGame() {
 
     Alert.alert(
@@ -90,6 +102,7 @@ export class PointRecordScreen extends React.Component<thisProps, thisState> {
     if (data) {
       data.status = MatchStatus.Finished;
       await setCurrentMatch(data);
+      this.saveHistory(data);
     }
     this.setState({currentTab: 1});
     this.tab2 && this.tab2.onTabUpdate();
