@@ -95,6 +95,7 @@ export class HistoryList extends React.Component<thisProps, thisState> {
        {
          text: 'Có', onPress: () => {
           setAllHistoryMatches(null);
+         this.setState({list: null});
        }
        },
      ],
