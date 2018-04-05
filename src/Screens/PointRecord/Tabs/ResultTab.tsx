@@ -15,92 +15,6 @@ interface thisState {
   ranks: any
 }
 
-const fakeData = {
-  status: MatchStatus.Finished,
-  ranks: [
-    {
-      rank: 0,
-      playerName: 'Teo',
-      summaryPoint: 30,
-      detail: [
-        {'3': 5},
-        {'2': 4},
-        {'1': 3}
-      ]
-    },
-    {
-      rank: 1,
-      playerName: 'Ti',
-      summaryPoint: 24,
-      detail: [
-        {'3': 5},
-        {'2': 4},
-        {'1': 3}
-      ]
-    },
-    {
-      rank: 2,
-      playerName: 'To',
-      summaryPoint: 23,
-      detail: [
-        {'3': 5},
-        {'2': 4},
-        {'1': 3}
-      ]
-    },
-    {
-      rank: 3,
-      playerName: 'Tu',
-      summaryPoint: 20,
-      detail: [
-        {'3': 5},
-        {'2': 4},
-        {'1': 3}
-      ]
-    }
-  ]
-};
-
-const fDatabase = {
-  status: MatchStatus.Finished,
-  players: {
-    playerName1: 'Nam',
-    playerName2: 'Mạnh',
-    playerName3: 'Hoàng',
-    playerName4: 'Linh'
-  },
-  list: [
-    {
-      id: 1,
-      playerPoint1: '3',
-      playerPoint2: '3',
-      playerPoint3: '1',
-      playerPoint4: '0'
-    },
-    {
-      id: 2,
-      playerPoint1: '2',
-      playerPoint2: '4',
-      playerPoint3: '0',
-      playerPoint4: '-2'
-    },
-    {
-      id: 3,
-      playerPoint1: '1',
-      playerPoint2: '12',
-      playerPoint3: '1',
-      playerPoint4: '1'
-    },
-    {
-      id: 4,
-      playerPoint1: '1',
-      playerPoint2: '1',
-      playerPoint3: '1',
-      playerPoint4: '2'
-    }
-  ]
-};
-
 export class ResultTab extends React.Component<thisProps, thisState> {
 
   async componentWillMount() {
@@ -119,7 +33,7 @@ export class ResultTab extends React.Component<thisProps, thisState> {
   }
 
   convertDataToState(data: any) {
-    let status = data ? data.status: MatchStatus.Start;
+    let status = data ? data.status : MatchStatus.Start;
     let ranks: any = [];
 
     let list = data.list;
@@ -150,7 +64,7 @@ export class ResultTab extends React.Component<thisProps, thisState> {
     let detail2: any = [];
     for (let key in p2sum) {
       let o: any = {};
-      o[key] = p2sum[key];
+      o[key] = p2sum[key].length;
       detail2.push(o);
     }
 
@@ -163,7 +77,7 @@ export class ResultTab extends React.Component<thisProps, thisState> {
     let detail3: any = [];
     for (let key in p3sum) {
       let o: any = {};
-      o[key] = p3sum[key];
+      o[key] = p3sum[key].length;
       detail3.push(o);
     }
 
@@ -176,9 +90,30 @@ export class ResultTab extends React.Component<thisProps, thisState> {
     let detail4: any = [];
     for (let key in p4sum) {
       let o: any = {};
-      o[key] = p4sum[key];
+      o[key] = p4sum[key].length;
       detail4.push(o);
     }
+
+    detail1.sort((a: any, b: any) => {
+      let keyA: any = Object.keys(a)[0];
+      let keyB: any = Object.keys(b)[0];
+      return keyB - keyA;
+    });
+    detail2.sort((a: any, b: any) => {
+      let keyA: any = Object.keys(a)[0];
+      let keyB: any = Object.keys(b)[0];
+      return keyB - keyA;
+    });
+    detail3.sort((a: any, b: any) => {
+      let keyA: any = Object.keys(a)[0];
+      let keyB: any = Object.keys(b)[0];
+      return keyB - keyA;
+    });
+    detail4.sort((a: any, b: any) => {
+      let keyA: any = Object.keys(a)[0];
+      let keyB: any = Object.keys(b)[0];
+      return keyB - keyA;
+    });
 
     let details: any = {
       player1: detail1,
@@ -187,10 +122,10 @@ export class ResultTab extends React.Component<thisProps, thisState> {
       player4: detail4,
     };
 
-    let sum1 = p1.reduce((a: any, b: any) => a + b, 0);
-    let sum2 = p2.reduce((a: any, b: any) => a + b, 0);
-    let sum3 = p3.reduce((a: any, b: any) => a + b, 0);
-    let sum4 = p4.reduce((a: any, b: any) => a + b, 0);
+    let sum1 = p1.reduce((a: any, b: any) => a + parseInt(b), 0);
+    let sum2 = p2.reduce((a: any, b: any) => a + parseInt(b), 0);
+    let sum3 = p3.reduce((a: any, b: any) => a + parseInt(b), 0);
+    let sum4 = p4.reduce((a: any, b: any) => a + parseInt(b), 0);
 
     let rank = [
       {player: 1, sum: sum1},
@@ -212,6 +147,8 @@ export class ResultTab extends React.Component<thisProps, thisState> {
       }
     }
 
+    console.log('manh test');
+    console.log(details);
     this.setState({
       status: status,
       ranks: ranks
