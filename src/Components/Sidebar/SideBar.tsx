@@ -18,6 +18,10 @@ const menuData = [
   {
     title: 'Đánh giá ứng dụng',
     linkTo: ScreenName.HomeScreen
+  },
+  {
+    title: 'Lịch sử đấu',
+    linkTo: ScreenName.HistoryList
   }
 ];
 

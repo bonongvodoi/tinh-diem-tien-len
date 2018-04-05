@@ -9,7 +9,9 @@ export const NativeHelper = {
 export const ScreenName = {
   HomeScreen: 'HomeScreen',
   PointRecordScreen: 'PointRecordScreen',
-  TutorialScreen: 'TutorialScreen'
+  TutorialScreen: 'TutorialScreen',
+  HistoryList: 'HistoryList',
+  HistoryDetails: 'HistoryDetails'
 };
 
 export const MatchStatus = {
