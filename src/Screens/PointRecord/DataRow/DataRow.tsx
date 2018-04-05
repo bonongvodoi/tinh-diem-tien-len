@@ -10,27 +10,20 @@ interface dataRowModel {
   playerPoint4: string
 }
 
-interface thisState {
-  data: dataRowModel
-}
 
 interface thisProps {
   data: dataRowModel,
+  isNewRow?: boolean,
   onSaveData: (data: any)=> void,
 }
 
-export class DataRow extends React.Component<thisProps, thisState> {
+export class DataRow extends React.Component<thisProps, {}> {
   textInput1: any;
   textInput2: any;
   textInput3: any;
   textInput4: any;
 
   componentWillMount() {
-    this.setState({data: this.props.data})
-  }
-
-  onSaveInputRow() {
-      this.props.onSaveData(this.state.data);
   }
 
   public focusToFirstCell(){
@@ -38,80 +31,82 @@ export class DataRow extends React.Component<thisProps, thisState> {
   }
 
   componentWillReceiveProps(nextProps: any) {
-    this.setState({data: nextProps.data});
+    if(!!nextProps.isNewRow)
+      this.textInput1.focus();
   }
 
   onUpdateFocus(text: string){
 
     if (isNaN(text as any)) return;
 
-    if( isNaN(this.state.data.playerPoint1 as any) || this.state.data.playerPoint1 == ''  ){
+    if( isNaN(this.props.data.playerPoint1 as any) || this.props.data.playerPoint1 == ''  ){
       this.textInput1.focus();
       return;
     } else
-    if(isNaN(this.state.data.playerPoint2 as any) || this.state.data.playerPoint2 == '' ){
-      this.textInput2.focus()
+    if(isNaN(this.props.data.playerPoint2 as any) || this.props.data.playerPoint2 == '' ){
+      this.textInput2.focus();
       return;
     } else
-    if(isNaN(this.state.data.playerPoint3 as any)  || this.state.data.playerPoint3 == ''){
-      this.textInput3.focus()
+    if(isNaN(this.props.data.playerPoint3 as any)  || this.props.data.playerPoint3 == ''){
+      this.textInput3.focus();
       return;
     }else
-    if ( isNaN(this.state.data.playerPoint4 as any) || this.state.data.playerPoint4 == '' ){
-      this.textInput4.focus()
+    if ( isNaN(this.props.data.playerPoint4 as any) || this.props.data.playerPoint4 == '' ){
+      this.textInput4.focus();
       return;
     }
-    this.onSaveInputRow();
+
   }
 
   render() {
-    if (this.state.data == null)
+    if (this.props.data == null)
       return null;
     else
       return (
       <View style={styles.inputRow}>
         <TextInput style={styles.input}
-               value={this.state.data.playerPoint1}
+               value={this.props.data.playerPoint1}
                ref={(input) => { this.textInput1 = input; }}
                blurOnSubmit={false}
                keyboardType={'numeric'}
                onChangeText={(text: string) => {
-                 let data = this.state.data;
+                 let data = {...this.props.data};
                  data.playerPoint1 = text;
-                 this.setState({data: data});
-                 setTimeout(()=>{this.onUpdateFocus(text);},500);
+                 this.props.onSaveData(data);
+                 setTimeout(()=>{this.onUpdateFocus(text);},300);
                }}/>
         <TextInput style={styles.input}
-               value={this.state.data.playerPoint2}
+               value={this.props.data.playerPoint2}
                blurOnSubmit={false}
                ref={(input) => { this.textInput2 = input; }}
                keyboardType={'numeric'}
                onChangeText={(text: string) => {
-                 let data = this.state.data;
+                 let data = {...this.props.data};
                  data.playerPoint2 = text;
-                 this.setState({data: data});
-                 setTimeout(()=>{this.onUpdateFocus(text);},500);
+                 this.props.onSaveData(data);
+                 setTimeout(()=>{this.onUpdateFocus(text);},300);
                }}/>
         <TextInput style={styles.input}
-               value={this.state.data.playerPoint3}
+               value={this.props.data.playerPoint3}
                blurOnSubmit={false}
                ref={(input) => { this.textInput3 = input; }}
                keyboardType={'numeric'}
                onChangeText={(text: string) => {
-                 let data = this.state.data;
+                 let data = {...this.props.data};
                  data.playerPoint3 = text;
-                 this.setState({data: data});
-                 setTimeout(()=>{this.onUpdateFocus(text);},500);
+                 this.props.onSaveData(data);
+                 setTimeout(()=>{this.onUpdateFocus(text);},300);
                }}/>
         <TextInput style={styles.input}
-               value={this.state.data.playerPoint4}
+               value={this.props.data.playerPoint4}
                blurOnSubmit={false}
                ref={(input) => { this.textInput4 = input; }}
                keyboardType={'numeric'}
                onChangeText={(text: string) => {
-                 let data = this.state.data;
+                 let data = {...this.props.data};
                  data.playerPoint4 = text;
-                 if (!isNaN(text as any))    setTimeout(()=>{this.onUpdateFocus(text); },500);
+                 this.props.onSaveData(data);
+                 setTimeout(()=>{this.onUpdateFocus(text);},300);
                }}/>
       </View>
     );

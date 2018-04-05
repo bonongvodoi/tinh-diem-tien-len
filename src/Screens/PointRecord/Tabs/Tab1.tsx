@@ -122,15 +122,15 @@ export class Tab1 extends React.Component<thisProps, thisState> {
   }
 
   checkData(data: any) {
-    if (isNaN( data.playerPoint1 as any)) return false;
-    if (isNaN( data.playerPoint2 as any)) return false;
-    if (isNaN( data.playerPoint3 as any)) return false;
-    if (isNaN( data.playerPoint4 as any)) return false;
+    if (!data.playerPoint1 || isNaN( data.playerPoint1 as any)) return false;
+    if (!data.playerPoint2 || isNaN( data.playerPoint2 as any)) return false;
+    if (!data.playerPoint3 || isNaN( data.playerPoint3 as any)) return false;
+    if (!data.playerPoint4 || isNaN( data.playerPoint4 as any)) return false;
     return true;
   }
 
   onSaveNewRow(data: any) {
-
+    this.setState({isAddNewRow: false, newRow: {...data}});
     if(this.state.data.list.indexOf(data) >= 0) return;
     this.props.updateTextHeader(this.state.data.list.length + 2);
     data.id = this.state.data.list.length;
@@ -150,15 +150,14 @@ export class Tab1 extends React.Component<thisProps, thisState> {
   }
 
   onSaveEditRow(data: any) {
-    if (this.checkData(data)) {
-      let list = this.state.data.list.slice();
-      let index = list.indexOf(data);
-      if (index >= 0) list[index] = data;
+    this.setState({isAddNewRow: false});
+    let list = this.state.data.list.slice();
+    let index = list.map((l: any) => l.id).indexOf(data.id);
+    if (index >= 0) list[index] = data;
 
-      this.setState({
-        data: {...this.state.data, list}
-      }, ()=>this.saveCurrentMatchToLocalStore(this.state.data));
-    }
+    this.setState({
+      data: {...this.state.data, list}
+    }, ()=>this.saveCurrentMatchToLocalStore(this.state.data));
   }
 
   resetNewRow() {
@@ -177,30 +176,30 @@ export class Tab1 extends React.Component<thisProps, thisState> {
     return (<View style={styles.inputRow}>
       <Input style={styles.input} value={this.state.data.players.playerName1}
              onChangeText={(text: string) => {
-               let data = this.state.data;
+               let data = {...this.state.data};
                data.players.playerName1 = text;
-               this.setState({data: data});
+               this.setState({data});
              }}
              placeholder='Tèo'/>
       <Input style={styles.input} value={this.state.data.players.playerName2}
              onChangeText={(text: string) => {
-               let data = this.state.data;
+               let data = {...this.state.data};
                data.players.playerName2 = text;
-               this.setState({data: data});
+               this.setState({data});
              }}
              placeholder='Tí'/>
       <Input style={styles.input} value={this.state.data.players.playerName3}
              onChangeText={(text: string) => {
-               let data = this.state.data;
+               let data = {...this.state.data};
                data.players.playerName3 = text;
-               this.setState({data: data});
+               this.setState({data});
              }}
              placeholder='Cuội'/>
       <Input style={styles.input} value={this.state.data.players.playerName4}
              onChangeText={(text: string) => {
-               let data = this.state.data;
+               let data = {...this.state.data};
                data.players.playerName4 = text;
-               this.setState({data: data});
+               this.setState({data});
              }}
              placeholder='Bờm'/>
     </View>)
@@ -266,10 +265,10 @@ export class Tab1 extends React.Component<thisProps, thisState> {
                 })
               }
               {
-                this.state.isAddNewRow ? <DataRow ref={(e) => {
+                <DataRow isNewRow={this.state.isAddNewRow} ref={(e) => {
                   this.rowToAdd = e
                 }} data={this.state.newRow} onSaveData={(data) => this.onSaveNewRow(data)}
-                /> : null
+                />
               }
             </View> : null
         }
