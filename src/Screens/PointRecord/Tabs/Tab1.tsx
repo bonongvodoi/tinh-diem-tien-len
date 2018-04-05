@@ -9,7 +9,8 @@ import {getCurrentMatch, removeCurrentMatch, setCurrentMatch} from "../../../Ser
 const Button: any = require('native-base').Button;
 
 interface thisProps {
-  updateHeaderStatus: ()=> void
+  updateHeaderStatus: ()=> void,
+  updateTextHeader: (index?: any)=> void
 }
 
 interface thisState {
@@ -52,8 +53,10 @@ export class Tab1 extends React.Component<thisProps, thisState> {
    if ( data.status === MatchStatus.Finished )
    {
      await removeCurrentMatch();
+     this.props.updateTextHeader();
    }else {
      this.setState({data: data});
+     this.props.updateTextHeader(data.list.length + 1);
    }
   }
 
@@ -90,6 +93,7 @@ export class Tab1 extends React.Component<thisProps, thisState> {
     });
 
     this.props.updateHeaderStatus();
+    this.props.updateTextHeader();
   }
 
 
@@ -113,6 +117,7 @@ export class Tab1 extends React.Component<thisProps, thisState> {
     this.setState({ data: data});
     this.saveCurrentMatchToLocalStore(data);
     this.props.updateHeaderStatus();
+    this.props.updateTextHeader(1);
 
   }
 
@@ -127,6 +132,7 @@ export class Tab1 extends React.Component<thisProps, thisState> {
   onSaveNewRow(data: any) {
 
     if(this.state.data.list.indexOf(data) >= 0) return;
+    this.props.updateTextHeader(this.state.data.list.length + 2);
     data.id = this.state.data.list.length;
     if (this.checkData(data)) {
       let list = this.state.data.list.slice();

@@ -18,7 +18,8 @@ interface thisProps {
 
 interface thisState {
   currentTab: number,
-  status: any
+  status: any,
+  headerText: string
 }
 
 
@@ -33,7 +34,7 @@ export class PointRecordScreen extends React.Component<thisProps, thisState> {
   };
 
   componentWillMount() {
-    this.setState({currentTab: 0, status: MatchStatus.Start});
+    this.setState({currentTab: 0, status: MatchStatus.Start, headerText: 'Ghi điểm tiến lên'});
     this.updateMatchStatus();
   }
 
@@ -49,20 +50,41 @@ export class PointRecordScreen extends React.Component<thisProps, thisState> {
     this.setState({status: status})
   }
 
+  async updateTextStatus(index?: any) {
+    let text;
+
+    if (this.state.status === MatchStatus.Start) {
+      text = "Ghi điểm tiên lên"
+    } else if (this.state.status === MatchStatus.Playing) {
+      text = 'Đang đánh ván ' + index;
+    } else if (this.state.status === MatchStatus.Finished) {
+      text = 'Xem kết quả ';
+    }
+
+    this.setState({headerText: text})
+  }
+
   async onEndGame() {
 
     Alert.alert(
       'Xác nhận',
       'Bạn có chắc chắn kết thúc trận đấu?',
       [
-        {text: 'Không', onPress: () =>{}},
-        {text: 'Có', onPress: () => {this.onConfirmOK()}},
+        {
+          text: 'Không', onPress: () => {
+        }
+        },
+        {
+          text: 'Có', onPress: () => {
+          this.onConfirmOK()
+        }
+        },
       ],
-      { cancelable: false }
+      {cancelable: false}
     )
   }
 
-  async onConfirmOK (){
+  async onConfirmOK() {
     let data = await getCurrentMatch();
 
     if (data) {
@@ -71,9 +93,10 @@ export class PointRecordScreen extends React.Component<thisProps, thisState> {
     }
     this.setState({currentTab: 1});
     this.tab2 && this.tab2.onTabUpdate();
+    this.updateTextStatus();
   }
 
-  onReplay(){
+  onReplay() {
     this.tab1 && this.tab1.onReplayClick();
     this.setState({currentTab: 0});
   }
@@ -82,8 +105,7 @@ export class PointRecordScreen extends React.Component<thisProps, thisState> {
     return (
       <View style={{backgroundColor: Colors.RedStrong, flexDirection: 'row'}}>
         <View style={{
-          height: 60, flex: 1, backgroundColor: Colors.RedStrong, justifyContent: 'center', alignItems: 'center',
-          position: 'absolute', left: 0
+          height: 60, flex: 1, backgroundColor: Colors.RedStrong, justifyContent: 'center', alignItems: 'center'
         }}>
           <Button
             transparent
@@ -93,7 +115,12 @@ export class PointRecordScreen extends React.Component<thisProps, thisState> {
           </Button>
         </View>
         <View style={{flex: 4, height: 60, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={{textAlign: 'center', fontSize: 16, fontWeight: 'bold', color: '#fff'}}>Ghi điểm tiến lên</Text>
+          <Text style={{
+            textAlign: 'center',
+            fontSize: 16,
+            fontWeight: 'bold',
+            color: '#fff'
+          }}>{this.state.headerText}</Text>
         </View>
         <View style={{flex: 1, height: 60, justifyContent: 'center', alignItems: 'center'}}>
           {
@@ -130,6 +157,7 @@ export class PointRecordScreen extends React.Component<thisProps, thisState> {
   onTabChange(page: any) {
     this.setState({currentTab: page.i});
     this.updateMatchStatus();
+    this.updateTextStatus();
     switch (page.i) {
       case 0:
         this.tab1 && this.tab1.onTabUpdate();
@@ -156,9 +184,15 @@ export class PointRecordScreen extends React.Component<thisProps, thisState> {
                activeTextStyle={styles.activeTabHeaderText}
           >
             <Tab1
-              ref={(e) => {this.tab1 = e}} updateHeaderStatus={() =>{
-                this.updateMatchStatus();
-            }}/>
+              ref={(e) => {
+                this.tab1 = e
+              }} updateHeaderStatus={() => {
+              this.updateMatchStatus();
+            }}
+              updateTextHeader={(index) => {
+                this.updateTextStatus(index)
+              }}
+            />
           </Tab>
           <Tab heading="Kết quả"
                tabStyle={styles.tabHeader}
