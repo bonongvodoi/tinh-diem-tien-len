@@ -9,6 +9,7 @@ import {getCurrentMatch, removeCurrentMatch, setCurrentMatch} from "../../../Ser
 const Button: any = require('native-base').Button;
 
 interface thisProps {
+  updateHeaderStatus: ()=> void
 }
 
 interface thisState {
@@ -66,6 +67,30 @@ export class Tab1 extends React.Component<thisProps, thisState> {
     await setCurrentMatch(data);
   }
 
+  public onReplayClick() {
+    this.setState({
+      newRow: {
+      id: -1,
+      playerPoint1: '',
+      playerPoint2: '',
+      playerPoint3: '',
+      playerPoint4: ''
+    },
+      data: {
+        status: MatchStatus.Start,
+        players: {
+          playerName1: this.state.data.players.playerName1,
+          playerName2: this.state.data.players.playerName2,
+          playerName3: this.state.data.players.playerName3,
+          playerName4: this.state.data.players.playerName4
+        },
+        list: []
+      }}, ()=>{
+      this.saveCurrentMatchToLocalStore(this.state.data);
+    });
+
+    this.props.updateHeaderStatus();
+  }
 
 
   onStartButtonClick() {
@@ -86,6 +111,8 @@ export class Tab1 extends React.Component<thisProps, thisState> {
     data.status = MatchStatus.Playing;
 
     this.setState({ data: data});
+    this.saveCurrentMatchToLocalStore(data);
+    this.props.updateHeaderStatus();
 
   }
 
@@ -204,6 +231,13 @@ export class Tab1 extends React.Component<thisProps, thisState> {
   }
 
   render() {
+    if (this.state.data && this.state.data.status == MatchStatus.Finished)
+      return (
+        <View style={styles.card}>
+          <Text style={styles.textInfo}>Trận đã kết thúc</Text>
+        </View>
+      )
+
     return (
       <Content style={styles.tabContent}>
         <View style={styles.inputRowName}>

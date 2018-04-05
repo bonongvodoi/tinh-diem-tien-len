@@ -4,6 +4,7 @@ import {Colors} from "../../../common/variables";
 import {ResultItem} from "../../../Components/ResultItem/ResultItem";
 import {getCurrentMatch, removeCurrentMatch, setCurrentMatch} from "../../../Services/index";
 import {MatchStatus} from "../../../common/constains";
+
 const Button: any = require('native-base').Button;
 
 interface thisProps {
@@ -99,6 +100,7 @@ const fDatabase = {
     }
   ]
 };
+
 export class ResultTab extends React.Component<thisProps, thisState> {
 
   async componentWillMount() {
@@ -106,21 +108,19 @@ export class ResultTab extends React.Component<thisProps, thisState> {
       status: 2,
       ranks: null
     });
-    // removeCurrentMatch();
-    // setCurrentMatch(fdata);
-    let data = await getCurrentMatch();
-    this.convertDataToState(fDatabase);
+    this.onTabUpdate();
   }
 
   async onTabUpdate() {
     let data = await getCurrentMatch();
-    if(!data) return;
-    this.setState({data:data });
+    console.log(data);
+    if (!data) return;
+    this.convertDataToState(data);
   }
 
-  convertDataToState(data: any){
-    let status = data.status;
-    let ranks:any = [];
+  convertDataToState(data: any) {
+    let status = data ? data.status: MatchStatus.Start;
+    let ranks: any = [];
 
     let list = data.list;
     let p1 = list.map((item: any) => item.playerPoint1);
@@ -134,8 +134,8 @@ export class ResultTab extends React.Component<thisProps, thisState> {
       return a;
     }, Object.create(null));
 
-    let detail1:any = [];
-    for(let key in p1sum){
+    let detail1: any = [];
+    for (let key in p1sum) {
       let o: any = {};
       o[key] = p1sum[key].length;
       detail1.push(o);
@@ -147,8 +147,8 @@ export class ResultTab extends React.Component<thisProps, thisState> {
       return a;
     }, Object.create(null));
 
-    let detail2:any = [];
-    for(let key in p2sum){
+    let detail2: any = [];
+    for (let key in p2sum) {
       let o: any = {};
       o[key] = p2sum[key];
       detail2.push(o);
@@ -160,8 +160,8 @@ export class ResultTab extends React.Component<thisProps, thisState> {
       return a;
     }, Object.create(null));
 
-    let detail3:any = [];
-    for(let key in p3sum){
+    let detail3: any = [];
+    for (let key in p3sum) {
       let o: any = {};
       o[key] = p3sum[key];
       detail3.push(o);
@@ -173,8 +173,8 @@ export class ResultTab extends React.Component<thisProps, thisState> {
       return a;
     }, Object.create(null));
 
-    let detail4:any = [];
-    for(let key in p4sum){
+    let detail4: any = [];
+    for (let key in p4sum) {
       let o: any = {};
       o[key] = p4sum[key];
       detail4.push(o);
@@ -202,7 +202,7 @@ export class ResultTab extends React.Component<thisProps, thisState> {
 
     let players = data.players;
 
-    for(let i = 0; i < 4; i++){
+    for (let i = 0; i < 4; i++) {
       let number = rank[i].player;
       ranks[i] = {
         rank: i,
@@ -218,32 +218,33 @@ export class ResultTab extends React.Component<thisProps, thisState> {
     })
   }
 
-  renderResult(){
+  renderResult() {
     return (
       <ScrollView style={{alignSelf: 'stretch'}}>
-        { (this.state.ranks || []).map((item: object, index: number) => <ResultItem key={index} item={item}/>) }
+        {(this.state.ranks || []).map((item: object, index: number) => <ResultItem key={index} item={item}/>)}
       </ScrollView>
     );
   }
 
   render() {
-    if(this.state.status === null) return null;
+    if (this.state.status === null) return null;
     return (
-        <View style={styles.tabContent}>
-          {this.state.status === 0 ? <View style={styles.card}>
-            <Text style={styles.textInfo}> Trận đấu chưa bắt đầu </Text>
-          </View> : null}
-          {this.state.status === 1 ? <View style={styles.card}>
+      <View style={styles.tabContent}>
+        {this.state.status === MatchStatus.Start ? <View style={styles.card}>
+          <Text style={styles.textInfo}> Trận đấu chưa bắt đầu </Text>
+        </View> : null}
+        {this.state.status === MatchStatus.Playing ?
+          <View style={styles.card}>
             <Text style={styles.textInfo}> Trận đấu đang diễn ra </Text>
           </View> : null}
-          {this.state.status === 2 ? this.renderResult() : null}
-        </View>
+        {this.state.status === MatchStatus.Finished? this.renderResult() : null}
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  tabContent:{
+  tabContent: {
     flex: 1
   },
   card: {
@@ -253,7 +254,7 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     borderBottomWidth: 0,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 1,

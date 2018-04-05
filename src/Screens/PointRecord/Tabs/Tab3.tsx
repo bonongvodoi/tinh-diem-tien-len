@@ -17,46 +17,6 @@ interface thisState {
   data: any,
   summary: any
 }
-// fake data
-const fdata = {
-  status: MatchStatus.Finished,
-  players: {
-    playerName1: 'Nam',
-    playerName2: 'Mạnh',
-    playerName3: 'Hoàng',
-    playerName4: 'Linh'
-  },
-  list: [
-    {
-      id: 1,
-      playerPoint1: '13',
-      playerPoint2: '12',
-      playerPoint3: '21',
-      playerPoint4: '1'
-    },
-    {
-      id: 2,
-      playerPoint1: '1',
-      playerPoint2: '11',
-      playerPoint3: '1',
-      playerPoint4: '1'
-    },
-    {
-      id: 3,
-      playerPoint1: '1',
-      playerPoint2: '12',
-      playerPoint3: '1',
-      playerPoint4: '1'
-    },
-    {
-      id: 4,
-      playerPoint1: '1',
-      playerPoint2: '1',
-      playerPoint3: '1',
-      playerPoint4: '2'
-    }
-  ]
-};
 
 export class Tab3 extends React.Component<thisProps, thisState> {
 
@@ -85,6 +45,8 @@ export class Tab3 extends React.Component<thisProps, thisState> {
    }
 
    summaryData(){
+     if (!this.state.data) return;
+
      let list = this.state.data.list;
      let s1 = 0, s2 = 0, s3 = 0, s4 = 0;
 
@@ -122,19 +84,23 @@ export class Tab3 extends React.Component<thisProps, thisState> {
   }
 
   render() {
-    if(!this.state.data) return null;
+    if(!this.state.data)  return (
+      <View style={styles.card}>
+        <Text style={styles.textInfo}>Trận đấu chưa diễn ra</Text>
+      </View>
+    );
 
     if (this.state.data.status == MatchStatus.Start)
       return (
         <View style={styles.card}>
-          <Text>Trân đấu chưa diễn ra</Text>
+          <Text style={styles.textInfo}>Trận đấu chưa bắt đầu</Text>
         </View>
       );
 
     if (this.state.data.status == MatchStatus.Playing)
       return (
         <View style={styles.card}>
-          <Text>Trân đấu đang diễn ra</Text>
+          <Text style={styles.textInfo}>Trận đấu đang diễn ra</Text>
         </View>
       )
 
