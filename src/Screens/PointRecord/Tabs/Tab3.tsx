@@ -36,7 +36,7 @@ export class Tab3 extends React.Component<thisProps, thisState> {
   async onTabUpdate() {
     let data = await getCurrentMatch();
     if(!data) return;
-    this.setState({data:data });
+    this.setState({data:data }, ()=>{ this.summaryData()} );
   }
 
   async getDataFromLocalAsync(){
